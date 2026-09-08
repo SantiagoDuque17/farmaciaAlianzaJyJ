@@ -1,5 +1,6 @@
 let clientes = [
-  { id: 1, nombre: 'Laptop', precio: 1200 }
+  { id: 1, nombre: 'Samuel Londoño', email: "samu@gmai.com" }
+  { id: 2, nombre: 'Valentina Andrade', email: "vale@gmai.com" }
 ];
 
 const getAll = (req, res) => {
