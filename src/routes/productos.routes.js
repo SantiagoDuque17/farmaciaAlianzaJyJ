@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/productos.controller');
+const ctrlProductos = require('../controllers/productos.controller');
 
-router.get('/', ctrl.getAll);
-router.get('/:id', ctrl.getById);
-router.post('/', ctrl.create);
+router.get('/', ctrlProductos.getAll);
+router.get('/:id', ctrlProductos.getById);
+router.post('/', ctrlProductos.create);
 
 module.exports = router;
