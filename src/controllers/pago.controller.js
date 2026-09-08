@@ -1,5 +1,6 @@
 let pagos = [
-  { id: 1, nombre: 'Laptop', precio: 1200 }
+  { idMovimiento:00001 , Usuario: 'A/N', total: 1200 },
+  { idMovimiento:00002 , Usuario: 'A/N', total: 3400 }
 ];
 
 const getAll = (req, res) => {
