@@ -1,24 +1,38 @@
-let productos = [
-  { id: 1, nombre: 'Laptop', precio: 1200 }
-];
+const ProductoModel = require('../models/productos.model');
 
-const getAll = (req, res) => {
-  res.json({ ok: true, data: productos });
+// GET /api/productos
+const getAll = async (req, res) => {
+  try {
+    const data = await ProductoModel.getAll();
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const getById = (req, res) => {
-  const item = productos.find(
-    p => p.id == req.params.id
-  );
-  if (!item) return res.status(404)
-    .json({ ok: false, msg: 'No encontrado' });
-  res.json({ ok: true, data: item });
+// GET /api/productos/:id
+const getById = async (req, res) => {
+  try {
+    const data = await ProductoModel.getById(req.params.id);
+    if (!data) return res.status(404)
+      .json({ ok: false, msg: 'Producto no encontrado' });
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const create = (req, res) => {
-  const nuevo = { id: Date.now(), ...req.body };
-  productos.push(nuevo);
-  res.status(201).json({ ok: true, data: nuevo });
+// POST /api/productos
+const create = async (req, res) => {
+  try {
+    const { nombre, precio, stock } = req.body;
+    if (!nombre || !precio)
+      return res.status(400).json({ ok: false, msg: 'nombre y precio requeridos' });
+    const data = await ProductoModel.create({ nombre, precio, stock });
+    res.status(201).json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
 module.exports = { getAll, getById, create };
