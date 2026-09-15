@@ -1,26 +1,38 @@
-let ventas = [
-  { id: 1, nombre: 'Laptop', precio: 1200 },
-  { id: 2, nombre: 'televisor', precio: 5000 },
-  { id: 3, nombre: 'ventilador', precio: 7000 }
-];
+const VentasModel = require('../models/ventas.model');
 
-const getAll = (req, res) => {
-  res.json({ ok: true, data: ventas });
+// GET /api/ventas
+const getAll = async (req, res) => {
+  try {
+    const data = await VentasModel.getAll();
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const getById = (req, res) => {
-  const item = ventas.find(
-    p => p.id == req.params.id
-  );
-  if (!item) return res.status(404)
-    .json({ ok: false, msg: 'No encontrado' });
-  res.json({ ok: true, data: item });
+// GET /api/ventas/:id
+const getById = async (req, res) => {
+  try {
+    const data = await VentasModel.getById(req.params.id);
+    if (!data) return res.status(404)
+      .json({ ok: false, msg: 'Venta no encontrada' });
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const create = (req, res) => {
-  const nuevo = { id: Date.now(), ...req.body };
-  ventas.push(nuevo);
-  res.status(201).json({ ok: true, data: nuevo });
+// POST /api/ventas
+const create = async (req, res) => {
+  try {
+    const { producto_id, cantidad } = req.body;
+    if (!producto_id || !cantidad)
+      return res.status(400).json({ ok: false, msg: 'producto_id y cantidad requeridos' });
+    const data = await VentasModel.create({ producto_id, cantidad });
+    res.status(201).json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
 module.exports = { getAll, getById, create };

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/clientes.controller');
+const ctrlClientes = require('../controllers/clientes.controller');
 
-router.get('/', ctrl.getAll);
-router.get('/:id', ctrl.getById);
-router.post('/', ctrl.create);
+router.get('/', ctrlClientes.getAll);
+router.get('/:id', ctrlClientes.getById);
+router.post('/', ctrlClientes.create);
 
 module.exports = router;

@@ -1,24 +1,38 @@
-let usuarios = [
-  { id: 1, nombre: 'Laptop', precio: 1200 }
-];
+const UsuariosModel = require('../models/usuarios.model');
 
-const getAll = (req, res) => {
-  res.json({ ok: true, data: usuarios });
+// GET /api/usuarios
+const getAll = async (req, res) => {
+  try {
+    const data = await UsuariosModel.getAll();
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const getById = (req, res) => {
-  const item = usuarios.find(
-    p => p.id == req.params.id
-  );
-  if (!item) return res.status(404)
-    .json({ ok: false, msg: 'No encontrado' });
-  res.json({ ok: true, data: item });
+// GET /api/usuarios/:id
+const getById = async (req, res) => {
+  try {
+    const data = await UsuariosModel.getById(req.params.id);
+    if (!data) return res.status(404)
+      .json({ ok: false, msg: 'Usuario no encontrado' });
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const create = (req, res) => {
-  const nuevo = { id: Date.now(), ...req.body };
-  usuarios.push(nuevo);
-  res.status(201).json({ ok: true, data: nuevo });
+// POST /api/usuarios
+const create = async (req, res) => {
+  try {
+    const { nombre, email, password } = req.body;
+    if (!nombre || !email || !password)
+      return res.status(400).json({ ok: false, msg: 'nombre, email y password requeridos' });
+    const data = await UsuariosModel.create({ nombre, email, password });
+    res.status(201).json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
 module.exports = { getAll, getById, create };

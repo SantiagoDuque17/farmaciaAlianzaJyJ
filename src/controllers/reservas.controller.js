@@ -1,24 +1,38 @@
-let reservas = [
-  { id: 1, nombre: 'Laptop', precio: 1200 }
-];
+const ReservasModel = require('../models/reservas.model');
 
-const getAll = (req, res) => {
-  res.json({ ok: true, data: reservas });
+// GET /api/reservas
+const getAll = async (req, res) => {
+  try {
+    const data = await ReservasModel.getAll();
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const getById = (req, res) => {
-  const item = reservas.find(
-    p => p.id == req.params.id
-  );
-  if (!item) return res.status(404)
-    .json({ ok: false, msg: 'No encontrado' });
-  res.json({ ok: true, data: item });
+// GET /api/reservas/:id
+const getById = async (req, res) => {
+  try {
+    const data = await ReservasModel.getById(req.params.id);
+    if (!data) return res.status(404)
+      .json({ ok: false, msg: 'Reserva no encontrada' });
+    res.json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
-const create = (req, res) => {
-  const nuevo = { id: Date.now(), ...req.body };
-  reservas.push(nuevo);
-  res.status(201).json({ ok: true, data: nuevo });
+// POST /api/reservas
+const create = async (req, res) => {
+  try {
+    const { nombre, email, fecha } = req.body;
+    if (!nombre || !email)
+      return res.status(400).json({ ok: false, msg: 'nombre y email requeridos' });
+    const data = await ReservasModel.create({ nombre, email, fecha });
+    res.status(201).json({ ok: true, data });
+  } catch (err) {
+    res.status(500).json({ ok: false, msg: err.message });
+  }
 };
 
 module.exports = { getAll, getById, create };

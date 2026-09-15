@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const ctrl = require('../controllers/pagos.controller');
+const ctrlPagos = require('../controllers/pagos.controller');
 
-router.get('/', ctrl.getAll);
-router.get('/:id', ctrl.getById);
-router.post('/', ctrl.create);
+router.get('/', ctrlPagos.getAll);
+router.get('/:id', ctrlPagos.getById);
+router.post('/', ctrlPagos.create);
 
 module.exports = router;
