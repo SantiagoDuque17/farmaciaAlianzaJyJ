@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+<<<<<<< HEAD
 require('dotenv').config();
 
 // createPool: reutiliza conexiones automáticamente
@@ -23,4 +24,17 @@ pool.getConnection()
     process.exit(1); // detener app si no hay DB
   });
 
+=======
+
+const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10
+});
+
+>>>>>>> santiago-jwt-bcrypt
 module.exports = pool;
